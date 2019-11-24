@@ -1,0 +1,229 @@
+USE [DB_A50430_roshanp4]
+GO
+/****** Object:  Table [dbo].[SMS_DATA]    Script Date: 11/24/2019 16:08:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SMS_DATA](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[MOBILE_NO] [nvarchar](30) NULL,
+	[NAME] [nvarchar](100) NULL,
+	[EMAIL] [varchar](50) NULL,
+	[COUPON_CODE] [varchar](30) NULL,
+	[BRANCH] [nvarchar](50) NULL,
+	[CREATED_BY] [varchar](50) NULL,
+	[CREATED_DATE] [datetime] NULL,
+ CONSTRAINT [PK_SMS_DATA] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[USER_MST]    Script Date: 11/24/2019 16:08:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[USER_MST](
+	[USER_ID] [varchar](50) NOT NULL,
+	[USER_NAME] [nvarchar](100) NOT NULL,
+	[PWD] [nvarchar](30) NOT NULL,
+	[STATUS] [bit] NOT NULL,
+	[CREATED_BY] [varchar](50) NOT NULL,
+	[CREATE_DATE] [datetime] NOT NULL,
+ CONSTRAINT [PK_USER_MST] PRIMARY KEY CLUSTERED 
+(
+	[USER_ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  Table [dbo].[SMS_MST]    Script Date: 11/24/2019 16:08:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_PADDING ON
+GO
+CREATE TABLE [dbo].[SMS_MST](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[MOBILE_NO] [nvarchar](30) NULL,
+	[SMS_CONTENT] [nvarchar](300) NULL,
+	[SMS_TIME] [nvarchar](50) NULL,
+	[CREATED_DATE] [datetime] NULL,
+	[COUPON_CODE] [varchar](30) NULL,
+ CONSTRAINT [PK_SMS_MST] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING OFF
+GO
+/****** Object:  StoredProcedure [dbo].[SMS_LOGIN]    Script Date: 11/24/2019 16:09:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		ROSHAN PERINCHEERI
+-- Create date: 23 / 11 / 2019
+-- Description:	GETTING SMS DATA
+-- =============================================
+CREATE PROCEDURE [dbo].[SMS_LOGIN]
+(
+	@USER_ID VARCHAR(50),
+	@PWD NVARCHAR(300),
+	@IS_SUCCESS INT OUTPUT
+)
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @COUNT INT = 0
+	SET @IS_SUCCESS = 0
+	
+	SELECT  @COUNT = COUNT(1) 
+	FROM USER_MST
+	WHERE USER_ID = @USER_ID AND PWD = @PWD
+	
+	IF @COUNT > 0 SET @IS_SUCCESS = 1
+END
+GO
+/****** Object:  StoredProcedure [dbo].[INSERT_SMS_MST]    Script Date: 11/24/2019 16:09:13 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+--EXEC [INSERT_SMS_MST] '123456789','SMSM','23/10/2019',''
+-- =============================================
+-- Author:		ROSHAN PERINCHEERI
+-- Create date: 23 / 11 / 2019
+-- Description:	GETTING SMS DATA
+-- =============================================
+CREATE PROCEDURE [dbo].[INSERT_SMS_MST]
+(
+	@MOBILE_NO NVARCHAR(50),
+	@SMS_CONTENT NVARCHAR(200),
+	@SMS_TIME NVARCHAR(50),
+	@SMS_MSG VARCHAR(500) OUTPUT
+)
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+	DECLARE @COUPON_CODE VARCHAR(30)
+	SET @SMS_MSG = ''
+	
+	SET @COUPON_CODE = (SELECT CAST((RAND()*1000000) AS DECIMAL(6)))
+	
+	INSERT INTO SMS_MST (
+			MOBILE_NO,
+			SMS_CONTENT,
+			SMS_TIME,
+			CREATED_DATE,
+			COUPON_CODE
+			)
+	VALUES( @MOBILE_NO,
+			@SMS_CONTENT,
+			@SMS_TIME,
+			GETDATE(),
+			@COUPON_CODE )
+	
+	IF ISNULL(@COUPON_CODE,'')<>''
+		SET @SMS_MSG = 'Your Coupon code is '+CAST(@COUPON_CODE AS VARCHAR(30))
+	
+	
+END
+GO
+/****** Object:  StoredProcedure [dbo].[INSERT_SMS_DATA]    Script Date: 11/24/2019 16:09:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		ROSHAN PERINCHEERI
+-- Create date: 23 / 11 / 2019
+-- Description:	GETTING SMS DATA
+-- =============================================
+CREATE PROCEDURE [dbo].[INSERT_SMS_DATA]
+(
+	@MOBILE_NO NVARCHAR(50),
+	@NAME NVARCHAR(200),
+	@EMAIL VARCHAR(50),
+	@COUPON_CODE VARCHAR(30),
+	@BRANCH NVARCHAR(100),
+	@CREATED_BY VARCHAR(50),
+	@RESULT VARCHAR(300) OUTPUT
+)
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+	SET @RESULT = ''
+	
+	DECLARE @COUNT INT = 0 
+	SELECT @COUNT = COUNT(1) FROM SMS_MST 
+	WHERE MOBILE_NO = @MOBILE_NO AND RIGHT(COUPON_CODE,10) = RIGHT(@COUPON_CODE,10) 
+	
+	IF @COUNT > 0
+	BEGIN
+	
+	INSERT INTO SMS_DATA (
+			MOBILE_NO,
+			NAME,
+			EMAIL,
+			COUPON_CODE,
+			BRANCH,
+			CREATED_BY,
+			CREATED_DATE )
+	VALUES( @MOBILE_NO,
+			@NAME,
+			@EMAIL,
+			@COUPON_CODE,
+			@BRANCH,
+			@CREATED_BY,
+			GETDATE() )
+	SET @RESULT = 'Validated Successfully'
+	
+	END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[GET_SMS_DATA]    Script Date: 11/24/2019 16:09:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		ROSHAN PERINCHEERI
+-- Create date: 23 / 11 / 2019
+-- Description:	GETTING SMS DATA
+-- =============================================
+CREATE PROCEDURE [dbo].[GET_SMS_DATA]
+(
+	@MOBILE_NO NVARCHAR(50)
+)
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+	SELECT  MOBILE_NO,
+			NAME,
+			EMAIL,
+			COUPON_CODE,
+			BRANCH,
+			CREATED_BY,
+			CREATED_DATE  
+	FROM SMS_DATA
+	
+END
+GO
