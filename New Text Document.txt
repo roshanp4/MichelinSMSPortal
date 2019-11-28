@@ -1,0 +1,22 @@
+Dear Irshad,
+
+Please forward this request to Roshan for his reference, from our end we are sending the Authkey parameter for every request
+
+
+Success Request
+-----------------------
+Line 82347: 11/27/2019 05:53:12 PM, INFO  [Thread-980] Processor - 33599757-1da9-4e8a-bd0b-915b91c782b1_UserId_1123279_Slno_56272062 Post method processing: Json Request done for userid:1123279,Json QueryString:{"MobileNo":"971563010458","SMSContent":"Roshan Dubai","SMSTimeStamp":"11/27/2019 17:53:07","AuthKey":"MECSMS"} for 33599757-1da9-4e8a-bd0b-915b91c782b1_UserId_1123279_Slno_56272062
+Line 82360: 11/27/2019 05:53:13 PM, INFO  [Thread-980] Processor - 33599757-1da9-4e8a-bd0b-915b91c782b1_UserId_1123279_Slno_56272062: Request sent with PostMethod for userId:1123279,QueryString:{"MobileNo":"971563010458","SMSContent":"Roshan Dubai","SMSTimeStamp":"11/27/2019 17:53:07","AuthKey":"MECSMS"},URL:http://smsapi.michelinoffer.com/api/sms,Status code:200
+Line 82384:  URL:http://smsapi.michelinoffer.com/api/sms,Slno:56272062,TotalPushes:0,statuscode:200,Response:"Dear Customer,The E-coupon is already issued to your registered number.  To know more visit - www.michelinoffer.com ",RefQuery:{"MobileNo":"971563010458","SMSContent":"Roshan Dubai","SMSTimeStamp":"11/27/2019 17:53:07","AuthKey":"MECSMS"},Time taken:0.444At:Wed Nov 27 17:53:13 IST 2019
+
+
+Failure Request
+----------------------
+
+11/27/2019 05:53:27 PM, INFO  [Thread-980] Processor - 2b39de49-60b1-4d08-85a0-8dc2f2ba6096_UserId_1123279_Slno_56272083 Post method processing: Json Request done for userid:1123279,Json QueryString:{"MobileNo":"971564222049","SMSContent":"Anisha Sharjah","SMSTimeStamp":"11/27/2019 17:53:23","AuthKey":"MECSMS"} for 2b39de49-60b1-4d08-85a0-8dc2f2ba6096_UserId_1123279_Slno_56272083
+11/27/2019 05:53:28 PM, INFO  [Thread-980] Processor - 2b39de49-60b1-4d08-85a0-8dc2f2ba6096_UserId_1123279_Slno_56272083: Request sent with PostMethod for userId:1123279,QueryString:{"MobileNo":"971564222049","SMSContent":"Anisha Sharjah","SMSTimeStamp":"11/27/2019 17:53:23","AuthKey":"MECSMS"},URL:http://smsapi.michelinoffer.com/api/sms,Status code:200
+ URL:http://smsapi.michelinoffer.com/api/sms,Slno:56272083,TotalPushes:0,statuscode:200,Response:"Invalid data",RefQuery:{"MobileNo":"971564222049","SMSContent":"Anisha Sharjah","SMSTimeStamp":"11/27/2019 17:53:23","AuthKey":"MECSMS"},Time taken:0.451At:Wed Nov 27 17:53:28 IST 2019
+
+
+
+
